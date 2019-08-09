@@ -10,7 +10,7 @@
   <scm>
     <url>https://github.com/terrasync/groundnet_checker.git</url>
     <connection>scm:git://github.com:terrasync/groundnet_checker.git</connection>
-    <developerConnection>scm:git:@github.com:Portree-Kid/tar_n_feathers.git</developerConnection>
+    <developerConnection>scm:git@github.com:terrasync/groundnet_checker.git</developerConnection>
   </scm>
 	<packaging>jar</packaging>
 
