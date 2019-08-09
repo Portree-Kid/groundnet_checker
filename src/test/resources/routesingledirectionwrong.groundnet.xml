@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<groundnet>
+   <version>1</version>
+  <frequencies>
+  </frequencies>
+  <parkingList>
+    <Parking index="0"
+             type="gate"
+             name="Startup Location"
+             number=""
+             lat="N37 37.260"
+             lon="W122 23.351"
+             heading="151.827"
+             radius="97.349"
+             airlineCodes="" />
+
+  </parkingList>
+  <TaxiNodes>
+    <node index="1" lat="N37 37.257" lon="W122 22.547" isOnRunway="1" holdPointType="none" />
+    <node index="2" lat="N37 37.256" lon="W122 23.236" isOnRunway="0" holdPointType="none" />
+    <node index="3" lat="N37 37.256" lon="W122 23.302" isOnRunway="0" holdPointType="none" />
+  </TaxiNodes>
+  <TaxiWaySegments>
+    <arc begin="1" end="2" isPushBackRoute="0" name="" />
+    <arc begin="2" end="3" isPushBackRoute="0" name="" />
+    <arc begin="0" end="3" isPushBackRoute="0" name="" />
+  </TaxiWaySegments>
+</groundnet>
