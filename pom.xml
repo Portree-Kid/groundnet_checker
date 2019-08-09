@@ -6,7 +6,7 @@
 
 	<groupId>de.keithpaterson</groupId>
 	<artifactId>groundnet_checker</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.1-SNAPSHOT</version>
   <scm>
     <url>https://github.com/terrasync/groundnet_checker.git</url>
     <connection>scm:git://github.com:terrasync/groundnet_checker.git</connection>
