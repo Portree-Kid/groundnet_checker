@@ -139,7 +139,11 @@ public class GroundnetLoader  {
 					for (int i = 0; i < arcNodes.getLength(); i++) {
 						Element n = (Element) arcNodes.item(i);
 						Element start = nodes.get(n.getAttribute("begin"));
+						if(start == null)
+							throw new RuntimeException("Node with index=" + n.getAttribute("start") + " not found");
 						Element end = nodes.get(n.getAttribute("end"));
+						if(end == null)
+							throw new RuntimeException("Node with index=" + n.getAttribute("end") + " not found");
 						g.addEdge(start, end);
 						double lat1 = parse(start.getAttribute("lat"));
 						double lon1 = parse(start.getAttribute("lon"));
@@ -153,7 +157,8 @@ public class GroundnetLoader  {
 //					System.out.println();
 	
 				} catch (Exception e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
+//					e.printStackTrace();
 				}
 			}
 			return g;
