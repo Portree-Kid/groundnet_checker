@@ -9,7 +9,7 @@
 	<version>1.1-SNAPSHOT</version>
   <scm>
     <url>https://github.com/terrasync/groundnet_checker.git</url>
-    <connection>scm:git://github.com:terrasync/groundnet_checker.git</connection>
+    <connection>scm:git:@github.com:terrasync/groundnet_checker.git</connection>
     <developerConnection>scm:git@github.com:terrasync/groundnet_checker.git</developerConnection>
   </scm>
 	<packaging>jar</packaging>
