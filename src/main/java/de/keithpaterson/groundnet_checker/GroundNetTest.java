@@ -33,9 +33,9 @@ public class GroundNetTest {
 		try {
 			if(loadGraph.edgeSet().size()==0)
 				return;
-			List<Element> unconnected = loadGraph.vertexSet().stream()
-					.filter(p ->  Graphs.neighborListOf(loadGraph, p).size()== 0 ).collect(Collectors.toList());
-			assertEquals(0,unconnected.size(),"There are unconnected nodes in " + f);
+			List<String> unconnected = loadGraph.vertexSet().stream()
+					.filter(p ->  Graphs.neighborListOf(loadGraph, p).size()== 0 ).map(m -> m.getAttribute("index")).collect(Collectors.toList());
+			assertEquals(0,unconnected.size(),"There are unconnected nodes in " + f + " " + unconnected);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +79,7 @@ public class GroundNetTest {
 				return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
 						.filter(p -> !p.getFileName().toString().equals("pom.xml"))
 						.filter(p -> p.getFileName().toString().matches("[a-zA-Z0-9]*\\.(groundnet)\\.xml"))
-						.map(p -> new Object[]{p.getFileName().toString(),new GroundnetLoader().loadGraph(p.toFile())})
+						.map(p -> new Object[]{p.getFileName().toString(),new GroundnetLoader().loadGraphSafe(p.toFile())})
 						.map(Arguments::of).collect(Collectors.toList());
 				
 			} catch (IOException e1) {

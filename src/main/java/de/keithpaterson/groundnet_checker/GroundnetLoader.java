@@ -96,6 +96,17 @@ public class GroundnetLoader  {
 		}
 		return 0;
 	}
+	
+	public Graph<Element, DefaultEdge> loadGraphSafe(File f)  {
+		try {
+			return loadGraph(f);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 
 	public Graph<Element, DefaultEdge> loadGraph(File f)  {
 		
