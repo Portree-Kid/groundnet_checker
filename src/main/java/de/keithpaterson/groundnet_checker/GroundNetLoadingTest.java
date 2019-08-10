@@ -26,7 +26,7 @@ public class GroundNetLoadingTest {
 		try {
 			new GroundnetLoader().loadGraph(p.toFile());
 		} catch (Exception e) {
-			fail(e.getMessage());
+			fail("Error loading " + f + " " + e.getMessage());
 		}
 	}
 

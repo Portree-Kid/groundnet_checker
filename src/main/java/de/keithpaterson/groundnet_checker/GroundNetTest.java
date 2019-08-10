@@ -30,6 +30,8 @@ public class GroundNetTest {
 	@ParameterizedTest(name="Unconnected nodes : {0}")
 	@ArgumentsSource(FileProvider.class)
 	public void testUnconnected(String f, Graph<Element, DefaultEdge> loadGraph) {
+		if(loadGraph == null)
+			return;
 		try {
 			if(loadGraph.edgeSet().size()==0)
 				return;
@@ -45,6 +47,8 @@ public class GroundNetTest {
 	@ParameterizedTest(name="Runway routes {0}")
 	@ArgumentsSource(FileProvider.class)
 	public void testRunwayRoutes(String f, Graph<Element, DefaultEdge> loadGraph) {
+		if(loadGraph == null)
+			return;
 		try {
 			List<Element> runwayEnds = loadGraph.vertexSet().stream()
 					.filter(p ->  Graphs.neighborListOf(loadGraph, p).size() == 1 )
@@ -57,7 +61,7 @@ public class GroundNetTest {
 			for (Element parkingNode : parkingEnds) {
 				for (Element runwayNode : runwayEnds) {
 					GraphPath<Element, DefaultEdge> pathBetween = DijkstraShortestPath.findPathBetween(loadGraph, parkingNode, runwayNode);
-					assertNotNull( pathBetween, "No route between Node "+ parkingNode.getAttribute("name") + " (" + parkingNode.getAttribute("index") + ") Node " + parkingNode.getAttribute("name") + " (" + runwayNode.getAttribute("index") + ")");
+					assertNotNull( pathBetween, "There are missing routes in " + f + " From "+ parkingNode.getAttribute("name") + " To (" + parkingNode.getAttribute("index") + ") Node " + parkingNode.getAttribute("name") + " (" + runwayNode.getAttribute("index") + ")");
 //					System.out.println("Length " + pathBetween.getLength());
 				}
 			}
