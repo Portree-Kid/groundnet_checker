@@ -101,8 +101,7 @@ public class GroundnetLoader  {
 		try {
 			return loadGraph(f);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//Ignore
 		}
 		return null;
 	}
