@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,13 +22,13 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class GroundNetLoadingTest {
 
-	@ParameterizedTest(name="LoadFile : {0}")
+	@ParameterizedTest(name="{0} LoadFile")
 	@ArgumentsSource(FileProvider.class)
 	public void testLoad(String f, Path p) {
 		try {
 			new GroundnetLoader().loadGraph(p.toFile());
 		} catch (Exception e) {
-			fail("Error loading " + f + " " + e.getMessage());
+			fail( f + ":Error loading "  + e.getMessage());
 		}
 	}
 
@@ -35,7 +37,12 @@ public class GroundNetLoadingTest {
 		private static List<Arguments> files = fileProvider();
 
 		private static List<Arguments> fileProvider() {
-//			File projectBaseDir = new File("C:\\Users\\keith.paterson\\Documents\\FlightGear\\main");
+			Properties ignore = new Properties();
+			try {
+				ignore.load(new FileReader("ignore.list"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			File projectBaseDir = new File(".");
 			assertNotNull(projectBaseDir);
 			assertTrue(projectBaseDir.exists());
@@ -43,6 +50,7 @@ public class GroundNetLoadingTest {
 				return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
 						.filter(p -> !p.getFileName().toString().equals("pom.xml"))
 						.filter(p -> p.getFileName().toString().matches("[a-zA-Z0-9]*\\.(groundnet)\\.xml"))
+						.filter(p -> !ignore.containsKey(p.getFileName().toString()))
 						.map(p -> new Object[]{p.getFileName().toString(),p})
 						.map(Arguments::of).collect(Collectors.toList());
 				
