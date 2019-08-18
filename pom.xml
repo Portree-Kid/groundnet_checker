@@ -6,12 +6,12 @@
 
 	<groupId>de.keithpaterson</groupId>
 	<artifactId>groundnet_checker</artifactId>
-	<version>1.8-SNAPSHOT</version>
+	<version>1.8</version>
 	<scm>
 		<url>https://github.com/terrasync/groundnet_checker.git</url>
 		<connection>scm:git:git@github.com:terrasync/groundnet_checker.git</connection>
 		<developerConnection>scm:git:git@github.com:terrasync/groundnet_checker.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>groundnet_checker-1.8</tag>
 	</scm>
 	<packaging>jar</packaging>
 
