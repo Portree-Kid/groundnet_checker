@@ -145,6 +145,7 @@ public class GroundNetTest {
 		try {
 			List<Element> possibleParkings = loadGraph.vertexSet().stream().filter(p -> p.hasAttribute("type"))
 					.collect(Collectors.toList());
+			String message = "";
 			for (Element p1 : possibleParkings) {
 				for (Element p2 : possibleParkings) {
 					if (p1 == p2)
@@ -165,10 +166,13 @@ public class GroundNetTest {
 						continue;
 					double r1 = Double.parseDouble(p1.getAttribute("radius"));
 					double r2 = Double.parseDouble(p2.getAttribute("radius"));
-					assertTrue(distance > r1 + r2,
-							f+":Radius of " + p1.getAttribute("index") + " & " + p2.getAttribute("index") + " intersect");
-				}
+					if(distance > r1 + r2)
+					{
+						message += "Radius of " + p1.getAttribute("name") + " & " + p2.getAttribute("name") + " intersect" + ";"; 
+					}
+				}				
 			}
+			assertEquals("", message, message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
