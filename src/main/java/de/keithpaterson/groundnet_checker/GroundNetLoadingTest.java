@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 
 public class GroundNetLoadingTest {
 
-	@ParameterizedTest(name="{0} LoadFile")
+	@ParameterizedTest(name="{0}#LoadFile Test")
 	@ArgumentsSource(FileProvider.class)
 	public void testLoad(String f, Path p) {
 		try {
@@ -39,7 +39,10 @@ public class GroundNetLoadingTest {
 		private static List<Arguments> fileProvider() {
 			Properties ignore = new Properties();
 			try {
-				ignore.load(new FileReader("ignore.list"));
+				File f = new File("ignore.list");
+				if (f.exists()) {
+					ignore.load(new FileReader(f));
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
