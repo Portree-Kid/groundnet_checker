@@ -192,6 +192,7 @@ public class GroundNetTest {
 	public static class FileProvider implements ArgumentsProvider {
 
 		private static HashMap<String, Traffic> trafficList;
+		private static String branch;
 
 		@SuppressWarnings("unchecked")
 		private static void loadTraffic() {
@@ -203,11 +204,9 @@ public class GroundNetTest {
 
 		}
 
-		private static List<Arguments> files = fileProvider();
+		private static List<Arguments> files = null;
 
 		private static List<Arguments> fileProvider() {
-			String branch = System.getProperty("TRAVIS_BRANCH");			
-			System.out.println("Branch : " + branch);			
 			Properties ignore = new Properties();
 			try {
 				File f = new File("ignore.list");
@@ -222,7 +221,8 @@ public class GroundNetTest {
 			assertNotNull(projectBaseDir);
 			assertTrue(projectBaseDir.exists());
 			try {
-				if (branch != null && branch.matches("[a-zA-Z0-9]*_[0-9]*")) {
+				if (branch != null && branch.matches("GROUNDNET_[a-zA-Z0-9]*_[0-9]*")) {
+					System.out.println("Matched Branch");
 					String icao = branch.substring(0, branch.indexOf("_"));
 					return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
 							.filter(p -> !p.getFileName().toString().equals("pom.xml"))
@@ -251,6 +251,12 @@ public class GroundNetTest {
 
 		@Override
 		public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+			System.out.println("Branch : " + branch);
+			if(branch==null||!branch.equals(System.getProperty("TRAVIS_BRANCH")))
+			{
+				branch = System.getProperty("TRAVIS_BRANCH");
+				files = fileProvider();
+			}
 			return files.stream();
 		}
 	}

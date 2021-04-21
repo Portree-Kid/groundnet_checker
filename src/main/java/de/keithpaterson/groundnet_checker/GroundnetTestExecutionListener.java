@@ -46,19 +46,16 @@ public class GroundnetTestExecutionListener implements TestExecutionListener {
 
 	@Override
 	public void testPlanExecutionStarted(TestPlan testPlan) {
+		results.clear();
 		loadTraffic();
-		// TODO Auto-generated method stub
 		TestExecutionListener.super.testPlanExecutionStarted(testPlan);
-//		System.out.println("testPlanExecutionStarted " + testPlan.toString());
 		TestIdentifier rootTest = testPlan.getRoots().toArray(new TestIdentifier[1])[0];
-		System.out.println(rootTest);
+		System.out.println("Roottest : " + rootTest + " " + results.size());
 	}
 
 	@Override
 	public void dynamicTestRegistered(TestIdentifier testIdentifier) {
-		// TODO Auto-generated method stub
 		TestExecutionListener.super.dynamicTestRegistered(testIdentifier);
-//		System.out.println("dynamicTestRegistered " + testIdentifier.getDisplayName());
 		results.put(testIdentifier, new Result());
 		testCount++;
 	}
@@ -176,11 +173,7 @@ public class GroundnetTestExecutionListener implements TestExecutionListener {
 			fos.print("</html>\r\n");
 			System.out.println("DONE");
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -194,6 +187,10 @@ public class GroundnetTestExecutionListener implements TestExecutionListener {
 //			System.out.println("executionFinished " + testExecutionResult.toString());
 		}
 //		System.out.println("executionFinished " + testIdentifier.toString() + "\t" + testExecutionResult.toString());
+	}
+
+	public static Hashtable<TestIdentifier, Result> getResults() {
+		return results;
 	}
 
 }

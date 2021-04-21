@@ -55,6 +55,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.version>3.3.9</maven.version>
+		<jmockit.version>1.49</jmockit.version>
 	</properties>
 
 	<dependencies>
@@ -103,7 +104,7 @@
 		<dependency>
 			<groupId>org.jmockit</groupId>
 			<artifactId>jmockit</artifactId>
-			<version>1.24</version>
+			<version>${jmockit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -152,6 +153,9 @@
 							junit.jupiter.execution.parallel.enabled = true
 						</configurationParameters>
 					</properties>
+					<argLine>
+						-javaagent:"${settings.localRepository}"/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar
+					</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
