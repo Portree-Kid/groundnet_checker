@@ -30,16 +30,17 @@
 		</repository>
 	</repositories>
 
-	<!-- FIXME change it to the project's website -->
-	<url>http://www.example.com</url>
+	<url>https://github.com/Portree-Kid/groundnet_checker</url>
 	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 		<repository>
-			<id>bintray-portree-kid-maven</id>
-			<name>bintray</name>
-			<url>https://api.bintray.com/maven/portree-kid/maven/tar-n-feathers/;publish=1</url>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
-	</distributionManagement>
-	<licenses>
+	</distributionManagement>	<licenses>
 		<license>
 			<name>GNU General Public License 2.0 (GPLv2)</name>
 			<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt</url>
