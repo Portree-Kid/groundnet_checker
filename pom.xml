@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.portree-kid</groupId>
     <artifactId>groundnet_checker</artifactId>
     <version>1.12-SNAPSHOT</version>
+    <description>Testing for Flightgear Groundnets</description>
+    <developers>
+        <developer>
+            <id>Portree-Kid</id>
+            <name>Keith Paterson</name>
+            <email>keith.paterson@gmx.de</email>
+        </developer>
+    </developers>
     <scm>
         <url>https://github.com/Portree-Kid/groundnet_checker.git</url>
         <connection>scm:git:git@github.com:Portree-Kid/groundnet_checker.git</connection>
