@@ -38,11 +38,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+
 public class TrafficTest {
 	
 	static HashMap<String, Traffic> trafficList = new HashMap<>();
 	
-	
+	@Disabled
 	@ParameterizedTest(name="{0}#LoadFile Test")
 	@ArgumentsSource(FileProvider.class)
 	public void testLoad(String f, Path p) {

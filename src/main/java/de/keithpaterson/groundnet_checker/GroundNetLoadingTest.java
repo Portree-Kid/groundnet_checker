@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -34,9 +35,11 @@ public class GroundNetLoadingTest {
 
 	public static class FileProvider implements ArgumentsProvider {
 
-		private static List<Arguments> files = fileProvider();
+		private static List<Arguments> files = null;
 
-		private static List<Arguments> fileProvider() {
+        private static String branch;
+
+        private static List<Arguments> fileProvider() {
 			Properties ignore = new Properties();
 			try {
 				File f = new File("ignore.list");
@@ -50,21 +53,31 @@ public class GroundNetLoadingTest {
 			assertNotNull(projectBaseDir);
 			assertTrue(projectBaseDir.exists());
 			try {
-				return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
-						.filter(p -> !p.getFileName().toString().equals("pom.xml"))
-						.filter(p -> p.getFileName().toString().matches("[a-zA-Z0-9]*\\.(groundnet)\\.xml"))
-						.filter(p -> !ignore.containsKey(p.getFileName().toString()))
-						.map(p -> new Object[]{p.getFileName().toString(),p})
-						.map(Arguments::of).collect(Collectors.toList());
-				
+                if (branch != null && branch.matches("GROUNDNET_[a-zA-Z0-9]*_[0-9]*")) {
+                    String icao = branch.substring(branch.indexOf("_")+1, branch.indexOf("_", branch.indexOf("_")+1));
+                    System.out.println("Matched Branch : " + icao);
+
+                    return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
+                            .filter(p -> !p.getFileName().toString().equals("pom.xml"))
+//							.filter(p -> {System.out.println(p); return true;})
+							.filter(p -> p.getFileName().toString().matches(icao + "\\.(groundnet)\\.xml"))
+                            .map(p -> new Object[]{p.getFileName().toString(), p})
+                            .map(Arguments::of).collect(Collectors.toList());
+                }
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			return null;
+			return new ArrayList<>();
 		}
 
 		@Override
 		public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+            if(branch==null||!branch.equals(System.getProperty("TRAVIS_BRANCH")))
+            {
+                branch = System.getProperty("TRAVIS_BRANCH");
+				System.out.println("Creating for Branch : " + branch);
+                files = fileProvider();
+            }
 			return files.stream();
 		}
 	}

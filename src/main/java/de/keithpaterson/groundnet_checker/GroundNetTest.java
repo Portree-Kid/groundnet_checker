@@ -10,10 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -222,8 +219,8 @@ public class GroundNetTest {
 			assertTrue(projectBaseDir.exists());
 			try {
 				if (branch != null && branch.matches("GROUNDNET_[a-zA-Z0-9]*_[0-9]*")) {
-					System.out.println("Matched Branch");
-					String icao = branch.substring(0, branch.indexOf("_"));
+					String icao = branch.substring(branch.indexOf("_")+1, branch.indexOf("_", branch.indexOf("_")+1));
+					System.out.println("Matched Branch : " + icao);
 					return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
 							.filter(p -> !p.getFileName().toString().equals("pom.xml"))
 							.filter(p -> p.getFileName().toString().matches(icao + "\\.(groundnet)\\.xml"))
@@ -246,15 +243,15 @@ public class GroundNetTest {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			return null;
+			return new ArrayList<>();
 		}
 
 		@Override
 		public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-			System.out.println("Branch : " + branch);
 			if(branch==null||!branch.equals(System.getProperty("TRAVIS_BRANCH")))
 			{
 				branch = System.getProperty("TRAVIS_BRANCH");
+				System.out.println("Creating for Branch : " + branch);
 				files = fileProvider();
 			}
 			return files.stream();
