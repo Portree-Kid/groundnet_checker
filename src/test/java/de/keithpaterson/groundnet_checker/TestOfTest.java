@@ -77,7 +77,7 @@ public class TestOfTest {
 		System.setProperty("TRAVIS_BRANCH", "TOWER_EGEO_123");
 		launcher.execute(request);
 
-		assertEquals(168, listener.getResults().size());
+		assertEquals(0, listener.getResults().size());
 		System.out.println(request);
 	}
 

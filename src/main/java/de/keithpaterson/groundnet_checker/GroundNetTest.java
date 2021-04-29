@@ -270,15 +270,19 @@ public class GroundNetTest {
             assertNotNull(projectBaseDir);
             assertTrue(projectBaseDir.exists());
             try {
-                if (branch != null && branch.matches("GROUNDNET_[a-zA-Z0-9]*_[0-9]*")) {
-                    String icao = branch.substring(branch.indexOf("_") + 1, branch.indexOf("_", branch.indexOf("_") + 1));
-                    System.out.println("Matched Branch : " + icao);
-                    return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
-                            .filter(p -> !p.getFileName().toString().equals("pom.xml"))
-                            .filter(p -> p.getFileName().toString().matches(icao + "\\.(groundnet)\\.xml"))
-                            .map(p -> new Object[]{p.getFileName().toString(),
-                                    new GroundnetLoader().loadGraphSafe(p.toFile())})
-                            .map(Arguments::of).collect(Collectors.toList());
+                if (branch != null && branch.matches("[A-Z]*_[a-zA-Z0-9]*_[0-9]*")) {
+                    String type = branch.substring(0, branch.indexOf("_"));
+                    if( type.equals("GROUNDNET")) {
+                        String icao = branch.substring(branch.indexOf("_") + 1, branch.indexOf("_", branch.indexOf("_") + 1));
+                        System.out.println("Matched Branch : " + icao);
+                        return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
+                                .filter(p -> !p.getFileName().toString().equals("pom.xml"))
+                                .filter(p -> p.getFileName().toString().matches(icao + "\\.(groundnet)\\.xml"))
+                                .map(p -> new Object[]{p.getFileName().toString(),
+                                        new GroundnetLoader().loadGraphSafe(p.toFile())})
+                                .map(Arguments::of).collect(Collectors.toList());
+                    }
+                    return new ArrayList<>();
                 } else {
                     return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
                             .filter(p -> !p.getFileName().toString().equals("pom.xml"))
