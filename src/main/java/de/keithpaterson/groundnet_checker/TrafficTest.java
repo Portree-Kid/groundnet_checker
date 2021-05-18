@@ -42,7 +42,7 @@ import org.xml.sax.InputSource;
 public class TrafficTest {
 	
 	static HashMap<String, Traffic> trafficList = new HashMap<>();
-	
+
 	@Disabled
 	@ParameterizedTest(name="{0}#LoadFile Test")
 	@ArgumentsSource(FileProvider.class)
@@ -110,7 +110,7 @@ public class TrafficTest {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			File projectBaseDir = new File("D:\\Program Files\\FlightGear 2020.1.2\\data\\AI\\Traffic");
+			File projectBaseDir = new File("C:\\GIT\\fgdata\\AI\\Traffic");
 			assertNotNull(projectBaseDir);
 			assertTrue(projectBaseDir.exists());
 			try {
@@ -135,12 +135,14 @@ public class TrafficTest {
 
 	@AfterAll
 	public static void dumpDataBase() {
-		try( ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("traffic.obj")) ){
-			os.writeObject(trafficList);
-			os.flush();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+		if(trafficList.size() > 0) {
+			try( ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("traffic.obj")) ){
+				os.writeObject(trafficList);
+				os.flush();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -58,7 +58,7 @@ public class TestOfTest {
 		System.setProperty("TRAVIS_BRANCH", "GROUNDNET_EGEO_123");
 		launcher.execute(request);
 
-		assertEquals(0, listener.getResults().size());
+		assertEquals(1, listener.getResults().size());
 		System.out.println(request);
 	}
 
@@ -77,7 +77,26 @@ public class TestOfTest {
 		System.setProperty("TRAVIS_BRANCH", "TOWER_EGEO_123");
 		launcher.execute(request);
 
-		assertEquals(0, listener.getResults().size());
+		assertEquals(1, listener.getResults().size());
+		System.out.println(request);
+	}
+
+	@Test
+	public void testListenerMainBranch() {
+		LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+				.selectors(selectPackage("de.keithpaterson.groundnet_checker"), selectClass(GroundNetTest.class))
+				.filters(includeClassNamePatterns(".*Gr.*Test")).build();
+
+		Launcher launcher = LauncherFactory.create();
+
+		// Register a listener of your choice
+		GroundnetTestExecutionListener listener = new GroundnetTestExecutionListener();
+		launcher.registerTestExecutionListeners(listener);
+
+		System.setProperty("TRAVIS_BRANCH", "master");
+		launcher.execute(request);
+
+		assertEquals(169, listener.getResults().size());
 		System.out.println(request);
 	}
 

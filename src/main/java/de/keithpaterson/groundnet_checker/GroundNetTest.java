@@ -70,8 +70,7 @@ public class GroundNetTest {
                 for (Element runwayNode : runwayEnds) {
                     GraphPath<Element, DefaultEdge> pathBetween = DijkstraShortestPath.findPathBetween(loadGraph,
                             parkingNode, runwayNode);
-                    assertNotNull(pathBetween,
-                            f + ":There are missing routes in " + " From " + parkingNode.getAttribute("name") + " To ("
+                    assertNotNull(pathBetween,"There are missing routes in " + " From " + parkingNode.getAttribute("name") + " To ("
                                     + parkingNode.getAttribute("index") + ") Node " + runwayNode.getAttribute("name")
                                     + " (" + runwayNode.getAttribute("index") + ")");
 //					System.out.println("Length " + pathBetween.getLength());
@@ -144,26 +143,35 @@ public class GroundNetTest {
             List<Element> possibleParkings = loadGraph.vertexSet().stream().filter(p -> p.hasAttribute("type"))
                     .collect(Collectors.toList());
             String message = "";
+            // To check if we already have checke the invers
+            HashMap<String, String> intersects = new HashMap<>();
             for (Element p1 : possibleParkings) {
                 for (Element p2 : possibleParkings) {
                     if (p1 == p2)
                         continue;
-//					if (p1.getAttribute("index").equals(p2.getAttribute("index")))
-//						continue;
+					if (p1.getAttribute("index").equals(p2.getAttribute("index")))
+						continue;
                     if (p1.getAttribute("radius").isEmpty())
                         continue;
                     if (p2.getAttribute("radius").isEmpty())
+                        continue;
+                    String key = p1.getAttribute("index") + "_" + p2.getAttribute("index");
+                    String inverseKey = p2.getAttribute("index") + "_" + p1.getAttribute("index");
+                    if(intersects.containsKey(inverseKey))
                         continue;
                     Area p1Box = buildBox(p1);
                     p1Box.intersect(buildBox(p2));
 
                     if (!p1Box.isEmpty()) {
-                        message += "Parkings " + p1.getAttribute("name") + " & " + p2.getAttribute("name")
-                                + " intersect" + "||";
+                        message += "Parkings " + p1.getAttribute("name") + "("+p2.getAttribute("index")+") & " + p2.getAttribute("name")
+                                + "("+p1.getAttribute("index")+") intersect" + "||";
+                        intersects.put(key, "FAIL");
+                    } else {
+                        intersects.put(key, "PASS");
                     }
                 }
             }
-            assertEquals("", message, message);
+            assertEquals("", message, f + ":" + message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -287,10 +295,10 @@ public class GroundNetTest {
                     return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
                             .filter(p -> !p.getFileName().toString().equals("pom.xml"))
                             .filter(p -> p.getFileName().toString().matches("[a-zA-Z0-9]*\\.(groundnet)\\.xml"))
-                            .peek(p -> System.out.println(p.getFileName().toString().split("[.]")[0] + "\t" + trafficList.containsKey(p.getFileName().toString().split("[.]")[0])))
+                            //.peek(p -> System.out.println(p.getFileName().toString().split("[.]")[0] + "\t" + trafficList.containsKey(p.getFileName().toString().split("[.]")[0])))
                             .filter(p -> !(ignore.containsKey(p.getFileName().toString())) ||
                                     trafficList.containsKey(p.getFileName().toString().split("[.]")[0]))
-                            .peek(p -> System.out.println(p.getFileName()))
+                            //.peek(p -> System.out.println(p.getFileName()))
                             .map(p -> new Object[]{p.getFileName().toString(),
                                     new GroundnetLoader().loadGraphSafe(p.toFile())})
                             .map(Arguments::of).collect(Collectors.toList());
