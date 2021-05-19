@@ -21,7 +21,22 @@ import java.io.IOException;
 public class ConsoleLogger {
 
     public static void main(String[] args) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-        FileInputStream fileIS = new FileInputStream(new File("C:\\GIT\\main\\target\\surefire-reports\\TEST-de.keithpaterson.groundnet_checker.GroundNetTest.xml"));
+        AsciiTable table = new AsciiTable();
+
+        File f = new File(args[0]);
+        File[] files = f.listFiles((dir, name) -> name.startsWith("TEST"));
+
+        for (File testfile : files) {
+            processFile(testfile, table);
+        }
+//        System.out.println(table.render());
+        if (!table.getRawContent().isEmpty()) {
+            System.out.println(table.render(140));
+        }
+    }
+
+    private static void processFile(File f, AsciiTable table) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        FileInputStream fileIS = new FileInputStream(f);
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
         Document xmlDocument = builder.parse(fileIS);
@@ -29,9 +44,6 @@ public class ConsoleLogger {
         String expression = "/testsuite/testcase/failure";
         NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
 
-        AsciiTable table = new AsciiTable();
-
-        System.out.println("");
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node n = nodeList.item(i);
             String file = n.getAttributes().getNamedItem("message").getTextContent().split(":")[0];
@@ -40,15 +52,13 @@ public class ConsoleLogger {
 
             System.out.println(message);
             for (int j = 0; j < messages.length; j++) {
-                if(messages[j].isEmpty())
+                if (messages[j].trim().isEmpty())
                     continue;
                 table.addRow(file, messages[j]);
                 table.addRule();
                 System.out.println(messages[j]);
             }
         }
-//        System.out.println(table.render());
-        System.out.println(table.render(140));
     }
 
 }

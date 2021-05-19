@@ -290,7 +290,6 @@ public class GroundNetTest {
                                         new GroundnetLoader().loadGraphSafe(p.toFile())})
                                 .map(Arguments::of).collect(Collectors.toList());
                     }
-                    return new ArrayList<>();
                 } else {
                     return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
                             .filter(p -> !p.getFileName().toString().equals("pom.xml"))
@@ -307,7 +306,9 @@ public class GroundNetTest {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            return new ArrayList<>();
+            ArrayList<Arguments> ret = new ArrayList<>();
+            ret.add(Arguments.of("NOOP", null));
+            return ret;
         }
 
         @Override

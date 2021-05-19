@@ -5,6 +5,7 @@ import mockit.MockUp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.TestIdentifier;
@@ -77,7 +78,10 @@ public class TestOfTest {
 		System.setProperty("TRAVIS_BRANCH", "TOWER_EGEO_123");
 		launcher.execute(request);
 
-		assertEquals(1, listener.getResults().size());
+		assertEquals(8, listener.getResults().size());
+		for (Result result: listener.getResults().values()) {
+			assertEquals(TestExecutionResult.Status.SUCCESSFUL, result.getTestExecutionResult().getStatus());
+		}
 		System.out.println(request);
 	}
 
@@ -96,7 +100,7 @@ public class TestOfTest {
 		System.setProperty("TRAVIS_BRANCH", "master");
 		launcher.execute(request);
 
-		assertEquals(169, listener.getResults().size());
+		assertEquals(170, listener.getResults().size());
 		System.out.println(request);
 	}
 
