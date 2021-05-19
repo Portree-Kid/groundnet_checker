@@ -100,7 +100,7 @@ public class TestOfTest {
 		System.setProperty("TRAVIS_BRANCH", "master");
 		launcher.execute(request);
 
-		assertEquals(170, listener.getResults().size());
+		assertEquals(86, listener.getResults().size());
 		System.out.println(request);
 	}
 
