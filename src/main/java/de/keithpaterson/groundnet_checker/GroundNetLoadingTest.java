@@ -62,11 +62,19 @@ public class GroundNetLoadingTest {
 
                     return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
                             .filter(p -> !p.getFileName().toString().equals("pom.xml"))
-//							.filter(p -> {System.out.println(p); return true;})
+							//.filter(p -> {System.out.println(p); return true;})
 							.filter(p -> p.getFileName().toString().matches(icao + "\\.(groundnet)\\.xml"))
                             .map(p -> new Object[]{p.getFileName().toString(), p})
                             .map(Arguments::of).collect(Collectors.toList());
-                }
+                } else {
+					return Files.walk(projectBaseDir.toPath()).filter(p -> Files.isRegularFile(p))
+							.filter(p -> !p.getFileName().toString().equals("pom.xml"))
+							//.filter(p -> {System.out.println(p); return true;})
+							.filter(p -> p.getFileName().toString().matches("[a-zA-Z0-9]*\\.(groundnet)\\.xml"))
+							.map(p -> new Object[]{p.getFileName().toString(), p})
+							.map(Arguments::of).collect(Collectors.toList());
+
+				}
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

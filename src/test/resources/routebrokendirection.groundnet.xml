@@ -23,7 +23,7 @@
   <TaxiWaySegments>
     <arc begin="0" end="1" isPushBackRoute="0" name="" />
     <arc begin="1" end="0" isPushBackRoute="0" name="" />
-    <arc begin="2" end="3" isPushBackRoute="0" name="" />
-    <arc begin="3" end="2" isPushBackRoute="0" name="" />
+    <arc begin="2" end="3" isPushBackRoute="1" name="" />
+    <arc begin="3" end="2" isPushBackRoute="1" name="" />
   </TaxiWaySegments>
 </groundnet>

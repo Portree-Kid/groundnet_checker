@@ -22,6 +22,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+/**
+ * Loads a ground net into a @link org.jgrapht.Graph
+ */
 public class GroundnetLoader  {
 
 	private static Pattern COORDINATE_PATTERN = Pattern.compile("([NSEW])([0-9]*)\\s*([.0-9]*)");
@@ -71,6 +74,7 @@ public class GroundnetLoader  {
 					double lat2 = parse(end.getAttribute("lat"));
 					double lon2 = parse(end.getAttribute("lon"));
 					if (n.getAttribute("isPushBackRoute").equals("1")) {
+
 					} else {
 					}
 				}
@@ -97,7 +101,7 @@ public class GroundnetLoader  {
 		return 0;
 	}
 	
-	public Graph<Element, DefaultEdge> loadGraphSafe(File f)  {
+	public Graph<Element, GroundnetEdge> loadGraphSafe(File f)  {
 		try {
 			return loadGraph(f);
 		} catch (Exception e) {
@@ -107,9 +111,9 @@ public class GroundnetLoader  {
 	}
 	
 
-	public Graph<Element, DefaultEdge> loadGraph(File f)  {
+	public Graph<Element, GroundnetEdge> loadGraph(File f)  {
 		
-		Graph<Element, DefaultEdge> g = buildEmptySimpleGraph(); 
+		Graph<Element, GroundnetEdge> g = buildEmptySimpleGraph();
 	//		File f = new File(PATH, item.getPath() + "/" + item.icao + ".groundnet.xml");
 			if (f.canRead()) {
 				try (Scanner scanner = new Scanner(f, StandardCharsets.UTF_8.toString())) {
@@ -154,14 +158,11 @@ public class GroundnetLoader  {
 						Element end = nodes.get(n.getAttribute("end"));
 						if(end == null)
 							throw new RuntimeException("Node with index=" + n.getAttribute("end") + " not found");
-						g.addEdge(start, end);
+						g.addEdge(start, end, new GroundnetEdge(n));
 						double lat1 = parse(start.getAttribute("lat"));
 						double lon1 = parse(start.getAttribute("lon"));
 						double lat2 = parse(end.getAttribute("lat"));
 						double lon2 = parse(end.getAttribute("lon"));
-						if (n.getAttribute("isPushBackRoute").equals("1")) {
-						} else {
-						}
 					}
 					
 //					System.out.println();
@@ -175,10 +176,10 @@ public class GroundnetLoader  {
 		}
 
 	
-	private static Graph<Element, DefaultEdge> buildEmptySimpleGraph()
+	private static Graph<Element, GroundnetEdge> buildEmptySimpleGraph()
     {
         return GraphTypeBuilder
-            .<Element, DefaultEdge> directed().allowingMultipleEdges(false)
-            .allowingSelfLoops(true).edgeClass(DefaultEdge.class).weighted(false).buildGraph();
+            .<Element, GroundnetEdge> directed().allowingMultipleEdges(false)
+            .allowingSelfLoops(true).edgeClass(GroundnetEdge.class).weighted(false).buildGraph();
     }
 }
