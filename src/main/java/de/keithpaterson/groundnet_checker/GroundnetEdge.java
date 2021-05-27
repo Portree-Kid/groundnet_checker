@@ -9,4 +9,8 @@ public class GroundnetEdge extends DefaultEdge {
     public GroundnetEdge(Element n) {
         isPushback = "1".equals(n.getAttribute("isPushBackRoute"));
     }
+
+    public boolean isPushback() {
+        return isPushback;
+    }
 }

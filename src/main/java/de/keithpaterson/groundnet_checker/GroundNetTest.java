@@ -83,18 +83,42 @@ public class GroundNetTest {
 
     @ParameterizedTest(name = "{0}#Pushback routes")
     @ArgumentsSource(FileProvider.class)
-    public void testPushbackRoutes(String f, Graph<Element, DefaultEdge> loadGraph) {
+    public void testPushbackRoutes(String f, Graph<Element, GroundnetEdge> loadGraph) {
         if (loadGraph == null)
             return;
         try {
-            List<Element> parkingEnds = loadGraph.vertexSet().stream().filter(p -> p.hasAttribute("type"))
-                    .filter(p -> Graphs.neighborListOf(loadGraph, p).size() >= 1).collect(Collectors.toList());
+            String message = "";
+            List<Element> parkingEnds = loadGraph.vertexSet().stream().filter(p -> p.hasAttribute("type")).collect(Collectors.toList());
             for (Element parkingNode : parkingEnds) {
-                List<Element> nextNodes = Graphs.neighborListOf(loadGraph, parkingNode);
-                for (Element nextNode : new HashSet<Element>(nextNodes)) {
-//					System.out.println(nextNode.getAttribute("index"));					
+                if(parkingNode.hasAttribute("pushBackRoute")) {
+                    List<Element> nextNodes = Graphs.neighborListOf(loadGraph, parkingNode);
+                    List<Element> pushbackPoint = loadGraph.vertexSet().stream()
+                            .filter(p -> p.getAttribute("index").equals(parkingNode.getAttribute("pushBackRoute"))).collect(Collectors.toList());
+                    if( pushbackPoint.size() != 1 ) {
+                        message += "Pushback Node " + parkingNode.getAttribute("pushBackRoute") + " doesn't exist"  + "||";
+                        continue;
+                    }
+                    if( !"PushBack".equals(pushbackPoint.get(0).getAttribute("holdPointType").toString()) ) {
+                        message += "Pushback Node " + parkingNode.getAttribute("pushBackRoute") + " must be of type PushBack ("  + pushbackPoint.get(0).getAttribute("holdPointType").toString() + ")||";
+                        continue;
+                    }
+                    GraphPath<Element, GroundnetEdge> pathBetween = DijkstraShortestPath.findPathBetween(loadGraph,
+                            parkingNode, pushbackPoint.get(0));
+                    if(pathBetween==null) {
+                        message += "Route from Parking " + parkingNode.getAttribute("index") + " pushing back to " + parkingNode.getAttribute("pushBackRoute") + " doesn't exist" + "||";
+                    } else {
+                        boolean allPushback = true;
+                        for (GroundnetEdge edgy :pathBetween.getEdgeList()) {
+                            allPushback &= edgy.isPushback();
+                        }
+                        if(!allPushback) {
+                            message += "Route from Parking " + parkingNode.getAttribute("index") + " pushing back to " + parkingNode.getAttribute("pushBackRoute") + " must consist of pushback segments" + "||";
+                        }
+                    }
+
                 }
             }
+            assertEquals("", message, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -246,6 +270,10 @@ public class GroundNetTest {
         return 0;
     }
 
+    /**
+     * Provides a list of files and the loaded groundnet
+     */
+
     public static class FileProvider implements ArgumentsProvider {
 
         private static HashMap<String, Traffic> trafficList;
@@ -297,7 +325,7 @@ public class GroundNetTest {
                             //.peek(p -> System.out.println(p.getFileName().toString().split("[.]")[0] + "\t" + trafficList.containsKey(p.getFileName().toString().split("[.]")[0])))
                             .filter(p -> !(ignore.containsKey(p.getFileName().toString())) ||
                                     trafficList.containsKey(p.getFileName().toString().split("[.]")[0]))
-                            //.peek(p -> System.out.println(p.getFileName()))
+                            .peek(p -> System.out.println(p.getFileName()))
                             .map(p -> new Object[]{p.getFileName().toString(),
                                     new GroundnetLoader().loadGraphSafe(p.toFile())})
                             .map(Arguments::of).collect(Collectors.toList());
