@@ -4,7 +4,7 @@
 
     <groupId>io.github.portree-kid</groupId>
     <artifactId>groundnet_checker</artifactId>
-    <version>1.16</version>
+    <version>1.17-SNAPSHOT</version>
     <description>Testing for Flightgear Groundnets</description>
     <developers>
         <developer>
@@ -17,7 +17,7 @@
         <url>https://github.com/Portree-Kid/groundnet_checker.git</url>
         <connection>scm:git:git@github.com:Portree-Kid/groundnet_checker.git</connection>
         <developerConnection>scm:git:git@github.com:Portree-Kid/groundnet_checker.git</developerConnection>
-        <tag>groundnet_checker-1.16</tag>
+        <tag>HEAD</tag>
     </scm>
     <packaging>jar</packaging>
 
