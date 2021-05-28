@@ -136,7 +136,7 @@ public class GroundNetTest {
                             || Double.parseDouble(p.getAttribute("radius")) < 5)
                     .map(m -> "Id " + m.getAttribute("index") + " Size " + m.getAttribute("radius"))
                     .collect(Collectors.toList());
-            assertEquals(0, missizedParkings.size(), f + ":There are parkings with large radius " + missizedParkings);
+            assertEquals(0, missizedParkings.size(), "There are parkings with large radius " + missizedParkings);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,7 +152,7 @@ public class GroundNetTest {
                     p -> p.getAttribute("type").equals("gate") && p.getAttribute("airlineCodes").trim().equals(""))
                     .collect(Collectors.toList());
 
-            assertTrue(possibleParkings.size() > 0, f + ":Nowhere to park ");
+            assertTrue(possibleParkings.size() > 0, "Nowhere to park ");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,7 +195,7 @@ public class GroundNetTest {
                     }
                 }
             }
-            assertEquals("", message, f + ":" + message);
+            assertEquals("", message, message);
         } catch (Exception e) {
             e.printStackTrace();
         }

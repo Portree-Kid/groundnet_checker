@@ -113,6 +113,8 @@ public class GroundnetTestExecutionListener implements TestExecutionListener {
 							&& trafficList.get(c.getKey().getDisplayName().split("#")[0].split("\\.")[0])
 									.getFlights() > 0)
 					.collect(Collectors.toList());
+            fos.println("<DIV id=\"container\">");
+			fos.println("<DIV width = \"200px\" height=\"100%\" id=\"left\">");
 			fos.print("<TABLE>\r\n");
 			fos.print("<THEAD><TD class=\"alpha\">ICAO</TD><TD class=\"alpha\">Result</TD>" +
                     "<TD  class=\"num\">Tests</TD>" +
@@ -138,7 +140,7 @@ public class GroundnetTestExecutionListener implements TestExecutionListener {
 							fos2.close();
 						}
 						fos.print("<TR class=" + (failures>0?"FAILED":"SUCCESS") + ">");
-						fos.print("<TD><A href=\"" + lastIcao + ".html\">"+ lastIcao + "</TD>");
+						fos.print("<TD><A href=\"" + lastIcao + ".html\" target=\"right\">"+ lastIcao + "</TD>");
 						fos.print("<TD>" + (failures>0?"FAILED":"SUCCESS") + "</TD>");
 						fos.print("<TD>" + tests + "</TD>");
 						fos.print("<TD>" + failures + "</TD>");
@@ -171,7 +173,7 @@ public class GroundnetTestExecutionListener implements TestExecutionListener {
 			}
 			if(!lastIcao.isEmpty()) {
 				fos.print("<TR class=" + (failures>0?"FAILED":"SUCCESS") + ">");
-				fos.print("<TD><A href=\"" + lastIcao + ".html\">"+ lastIcao + "</TD>");
+				fos.print("<TD><A href=\"" + lastIcao + ".html\" target=\"right\">"+ lastIcao + "</TD>");
 				fos.print("<TD>" + (failures>0?"FAILED":"SUCCESS") + "</TD>");
 				fos.print("<TD>" + tests + "</TD>");
 				fos.print("<TD>" + failures + "</TD>");
@@ -179,6 +181,12 @@ public class GroundnetTestExecutionListener implements TestExecutionListener {
 				fos.print("<TD>" + trafficList.get(lastIcao).getFlights() + "</TD>");
 				fos.print("</TR>\r\n");
 			}
+			fos.println("</TABLE>");
+			fos.println("</DIV>");
+            fos.println("<DIV>");
+			fos.println("<IFRAME name=\"right\" frameborder=\"0\" height=\"100%\"></IFRAME>");
+            fos.println("</DIV>");
+            fos.println("</DIV>");
 			fos.print("</html>\r\n");
 			// System.out.println("Export Done");
 
